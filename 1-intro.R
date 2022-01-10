@@ -1,7 +1,7 @@
 #R: A first look course
 #Sheet 1: Introduction and basics
 #IT Learning Centre, University of Oxford
-#Srinivasa Rao, 2021
+#Srinivasa Rao, 2022
 
 #### MOTIVATION ####
 # Why do you need R?
@@ -32,14 +32,9 @@ sum(1,4,5,100) #Sum
 prod(2,3,5,6) #Product (multiply together)
 
 # A function is written as a line of text, then round brackets, then zero or more "arguments",
-# separated by commas.  (Yes, I said "zero or more!".  Some functions don't have arguments, 
-# or have arguments all of which are optional.  But you still have to put the brackets in,
-# or they don't work.  For instance:
+# separated by commas.  
 
 citation()
-
-# which tells you how to cite R in your work.  [Please do: the authors of R were mostly
-# volunteers, so citations are the only reward they get!])
 
 #### VARIABLES ####
 
@@ -48,18 +43,6 @@ a^2 #Square it
 
 # The "<-" is the "assignment operator"
 # You can also use "=" for this purpose, but "<-" is more conventional in R
-# It creates a variable called "a", to which the value "3" is assigned.  
-# Notice that the top-right pane isn't empty any more: it shows
-# a, and its value.  
-# Then in the next line, we squared it, and returned the result: 9.
-
-
-# The name "a" was arbitrary: we can choose almost anything we like as a variable name.  But
-# it's best to avoid things that are (or might be) names of functions, like "c", "df", "mean" or
-# "sum".  It's also best to avoid things like "if" and "for": we're not going to talk
-# about what these do in this course, but they also have special meanings.
-
-# When R is assigning a value, its default behaviour is not to print anything.  For instance
 
 bee <- a^3
 
@@ -81,19 +64,11 @@ print(bee)
 
 
 #### VECTORS ####
-# We said R was a "statistical programming language".  That means it's built to deal well with
-# data.  But we've just dealt with individual numbers so far.
-
 # The most basic data structure is a vector.  We can input vectors to R using a special function,
-# "c" (which stands for "concatenate").  Let's try it.
+# "c" (which stands for "combine").  Let's try it.
 
 vec.1 <- c(1,4,3)
 vec.2 <- c(4,2,2)
-
-# You'll see them appear top-right.
-
-# When you do any of the arithmetic operations on two vectors together, R does the operation
-# element by element.  Try:
 
 vec.1 + vec.2 #Element-wise addition
 vec.2^vec.1 #Element-wise powers
@@ -111,22 +86,16 @@ weights/heights^2
 # However, if your vectors have different lengths, R might exhibit some strange behaviour, and it
 # won't necessarily give an error, so be careful!
 
-# You can also do operations with vectors and constants:
-
 a <- 3
 vec.1 <- c(1,4,3)
 a*vec.1
 
-# We can have vectors of any type of data: for instance, by using quotation marks, we can make
 # a vector of text strings:
 
 text <- c("This", "is", "a", 'vector')
 
-# (There's no difference between using single and double quotes, as long as you close the 
-# text with the same type that you used to open it!)
-
 # A special kind of vector you might use is a list of numbers in sequence.  We can get that
-# using a colon, like so:
+# using a colon:
 
 naturals <- 1:50
 naturals
@@ -154,7 +123,7 @@ n <- 5
 
 
 #### SUBSETTING ####
-# One final thing: you can select part of a vector by using square brackets.  For instance,
+# You can select part of a vector by using square brackets.  For instance,
 vec.1[2]
 # returns the second entry in "vec.1".  To select a range of entries, we can put another vector
 # inside the square brackets.  For instance:

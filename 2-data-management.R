@@ -1,9 +1,9 @@
 #R: A first look course
 #Sheet 2: Data management
 #IT Learning Centre, University of Oxford
-#Srinivasa Rao, 2021
+#Srinivasa Rao, 2022
 
-##### RENAME df! ####
+##### Load data from file ####
 cars_dataset <- read.csv("Data/mtcars.csv")
 
 # We're loading a "csv" file, where "csv" stands for "comma-separated value".  

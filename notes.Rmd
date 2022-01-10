@@ -599,6 +599,88 @@ The disadvantage of piping is that it only really works when the thing you want 
 
 One last thing about pipes: if you end a line with a pipe, it's akin to ending a line withbrackets still open: R will assume your instructions aren't complete.  This lets you break piped instructions across multiple lines of code, which is necessary for readability if they get really long.
 
+
+
+
+## ggplot: prettier plots
+The package "ggplot2" is also part of the tidyverse, though it's also common to see this one used independently.  The main reason ggplot sees use is that the plots it makes are prettier, though in some ways (particularly choosing colours) they're harder to customise.  "gg", by the way, stands for "grammar of graphics".
+
+In ggplot, plots are defined as objects, like vectors and data frames.  This means it's easy to build up plots out of different elements, and return to and modify them.  (If you did the optional exercise on linear models, remember how you had to make sure that you'd just plotted the right graph, before using `abline`?  No more!)
+
+First, let's load the cars dataset again.
+```{r}
+cars_dataset <- read.csv("Data/mtcars.csv")
+```
+
+The basic function is `ggplot` itself.  Let's initialise a plot object.
+```{r initalise plot, echo = T}
+plot1 <- ggplot(data = cars_dataset, aes(x=disp, y=hp))
+```
+Here we're telling R that any plots we make on that plot object will use data from `cars_dataset`, that the $x$-axis will be `disp` and the $y$ will be `hp`.  The `aes` stands for "aesthetics": i.e. the visual characteristics of the plot.
+```{r add points, echo = T, fig.width=4, fig.height=4, fig.align="center"}
+plot1 + geom_point()
+```
+
+Here we've added the points to `plot1`, and displayed it.  But notice that this hasn't stored the resulting plot anywhere: if you enter `plot1` now into the console, it will just display some empty axes.  To store it back under the name `plot1` for later use, we would write:
+```{r store plot, echo = T}
+plot1 <- plot1 + geom_point()
+```
+and then you could enter `plot1` into the console to see it.  Alternatively, you could write
+```{r store and plot, echo = T, fig.width=4, fig.height=4, fig.align="center"}
+(plot1 <- plot1 + geom_point())
+```
+
+because brackets around an assignment tell R to then print whatever you've just defined.
+
+Let's set up the empty axes again, so we can try different types of plot.
+```{r empty axes, echo = T}
+plot2 <- ggplot(data = cars_dataset, aes(x=disp, y=hp))
+```
+What if we wanted the points to be red, like before?
+```{r red gg, echo = T, fig.width=4, fig.height=4, fig.align="center"}
+(plot2 <- plot2 + geom_point(colour="red"))
+```
+
+Notice we could have made this plot using one long set of instructions:
+```{r one long, echo = T,fig.width=4, fig.height=4, fig.align="center"}
+plot2 <- ggplot(data = cars_dataset, aes(x=disp, y=hp)) +
+            geom_point(colour="red")
+```
+
+Here we've ended a line with a `+`, which is much like ending a line with a pipe: R knows to expect further instructions on the next line.
+
+What if we wanted axis labels, and maybe also lines between the points?
+```{r labels lines, echo = T, fig.width=4, fig.height=4, fig.align="center"}
+(plot3 <- ggplot(data = cars_dataset, aes(x=disp, y=hp)) +
+            geom_point() + geom_path() + #Add points, then lines
+            labs(x = "Displacement", y= "Gross horsepower", title = "mtcars plot"))
+```
+
+ggplot actually has a function which automatically joins the points in left-to-right order: it's called `geom_line`.
+
+Let's round up the other types of plot.  We'll just provide the sample code here, without much commentary. Have a look at https://www.r-graph-gallery.com/ for examples of visualisation that others have done with R (with the necessary code).
+
+> **Exercise 13**
+>
+> Run the code below to see what it does.  Add any comments you feel are necessary.
+
+```{r ex13, echo = T, eval = F}
+(box_plot <- ggplot(data = cars_dataset, aes(y=mpg)) + geom_boxplot() +
+              labs(y = "Miles per gallon", title = "Box plot") +
+              theme(axis.text.x=element_blank(), axis.ticks.x = element_blank())
+                                  #Remove meaningless x-axis
+)
+(hist <- ggplot(data= cars_dataset, aes(x=disp)) + geom_histogram() +
+              labs(x = "Displacement", title = "Histogram") )
+
+(bar_chart <- ggplot(data = cars_dataset, aes(x=gear)) + geom_bar() +
+              labs(y = "Number of gears", title = "Bar chart"))
+      #Notice we don't have to make a frequency table first any more!
+```
+I've not provided the sample code for making a pie chart because ggplot _really_ doesn't want you to make pie charts: you have to make a stacked bar chart first, and then wrap one of the axes around into a circle.  I told you statisticians hated pie charts with a passion!
+
+
+# More about the Tidyverse
 ## Tibbles
 Instead of data frames, the tidyverse uses "tibbles".  The details between them are complex and technical; the upshot is that you use a different function to load your data from a CSV file: instead of read.csv, we use read_csv.  (There is a convention that tidyverse functions use underscores---obtained by pressing Shift+-, the hyphen key to the right of 0---where base R would use dots.)
 
@@ -652,11 +734,11 @@ Here the `!` means "not", like how we used `!=` for "not equal to".
 
 We can also select columns by properties of the column names:
 
-> **Exercise 13**
+> **Exercise 14**
 >
 > Run the following code.  In a comment after each pair of lines, write what the code does.
 
-```{r ex13, echo = T, eval = F}
+```{r ex14, echo = T, eval = F}
 cars_starts_d <- cars_tib %>% select(starts_with("d"))
 head(cars_starts_d)
 #
@@ -669,11 +751,11 @@ head(cars_contains_p)
 ### `filter`
 `filter` is the function for selecting rows by their properties.  The syntax for this is a little cleaner than the base-R syntax, in some cases!.  We write the code that does the same as the filtrations on sheet 2.
 
-> **Exercise 14**
+> **Exercise 15**
 >
 > Check that these do what you'd expect.  (There's no need to write anything!)  Compare with the code on Sheet 2.  Which method do you prefer?
 
-```{r ex14, echo = T, eval = F}
+```{r ex15, echo = T, eval = F}
 cars_tib %>% filter(gear == 4)
 cars_tib %>% filter(mpg < 15)
 cars_tib %>% filter(carb >= 6)
@@ -701,7 +783,7 @@ the non-tidyverse way of doing the same thing.  Sometimes the tidyverse is less 
 
 (If you prefer the American/Oxford spelling of this word, `summarize` does the same thing.)
 
-> **Exercise 15**
+> **Exercise 16**
 >
 > How would you change the second line marked with (*) above to get the mean of each numeric column?
 
@@ -715,85 +797,9 @@ cars_tib <- cars_tib %>% mutate(hp_per_cyl = hp/cyl)
 ```
 (This sort of statement is common in programming, where the same object, in this case `cars_tib`, appears on both sides of an assignment: it means "take `cars_tib`, do the appropriate operation on it, and then store the result back as `cars_tib` again, overwriting the previous value".  If we don't do the assignment, the new column gets calculated and the result printed, but it doesn't get stored anywhere for later use.)
 
-> **Exercise 16**
->
-> Create a column called `gear_plus_carb` that is the sum of the gear and carb columns, like on Exercise 8.
-
-
-
-
-
-## ggplot: prettier plots
-The package "ggplot2" is also part of the tidyverse, though it's also common to see this one used independently.  The main reason ggplot sees use is that the plots it makes are prettier, though in some ways (particularly choosing colours) they're harder to customise.  "gg", by the way, stands for "grammar of graphics".
-
-In ggplot, plots are defined as objects, like vectors and data frames.  This means it's easy to build up plots out of different elements, and return to and modify them.  (If you did the optional exercise on linear models, remember how you had to make sure that you'd just plotted the right graph, before using `abline`?  No more!)
-
-The basic function is `ggplot` itself.  Let's initialise a plot object.
-```{r initalise plot, echo = T}
-plot1 <- ggplot(data = cars_tib, aes(x=disp, y=hp))
-```
-Here we're telling R that any plots we make on that plot object will use data from `cars_tib`, that the $x$-axis will be `disp` and the $y$ will be `hp`.  The `aes` stands for "aesthetics": i.e. the visual characteristics of the plot.
-```{r add points, echo = T, fig.width=4, fig.height=4, fig.align="center"}
-plot1 + geom_point()
-```
-
-Here we've added the points to `plot1`, and displayed it.  But notice that this hasn't stored the resulting plot anywhere: if you enter `plot1` now into the console, it will just display some empty axes.  To store it back under the name `plot1` for later use, we would write:
-```{r store plot, echo = T}
-plot1 <- plot1 + geom_point()
-```
-and then you could enter `plot1` into the console to see it.  Alternatively, you could write
-```{r store and plot, echo = T, fig.width=4, fig.height=4, fig.align="center"}
-(plot1 <- plot1 + geom_point())
-```
-
-because brackets around an assignment tell R to then print whatever you've just defined.
-
-Let's set up the empty axes again, so we can try different types of plot.
-```{r empty axes, echo = T}
-plot2 <- ggplot(data = cars_tib, aes(x=disp, y=hp))
-```
-What if we wanted the points to be red, like before?
-```{r red gg, echo = T, fig.width=4, fig.height=4, fig.align="center"}
-(plot2 <- plot2 + geom_point(colour="red"))
-```
-
-Notice we could have made this plot using one long set of instructions:
-```{r one long, echo = T,fig.width=4, fig.height=4, fig.align="center"}
-plot2 <- ggplot(data = cars_tib, aes(x=disp, y=hp)) +
-            geom_point(colour="red")
-```
-
-Here we've ended a line with a `+`, which is much like ending a line with a pipe: R knows to expect further instructions on the next line.
-
-What if we wanted axis labels, and maybe also lines between the points?
-```{r labels lines, echo = T, fig.width=4, fig.height=4, fig.align="center"}
-(plot3 <- ggplot(data = cars_tib, aes(x=disp, y=hp)) +
-            geom_point() + geom_path() + #Add points, then lines
-            labs(x = "Displacement", y= "Gross horsepower", title = "mtcars plot"))
-```
-
-ggplot actually has a function which automatically joins the points in left-to-right order: it's called `geom_line`.
-
-Let's round up the other types of plot.  We'll just provide the sample code here, without much commentary. Have a look at https://www.r-graph-gallery.com/ for examples of visualisation that others have done with R (with the necessary code).
-
 > **Exercise 17**
 >
-> Run the code below to see what it does.  Add any comments you feel are necessary.
-
-```{r ex17, echo = T, eval = F}
-(box_plot <- ggplot(data = cars_tib, aes(y=mpg)) + geom_boxplot() +
-              labs(y = "Miles per gallon", title = "Box plot") +
-              theme(axis.text.x=element_blank(), axis.ticks.x = element_blank())
-                                  #Remove meaningless x-axis
-)
-(hist <- ggplot(data= cars_tib, aes(x=disp)) + geom_histogram() +
-              labs(x = "Displacement", title = "Histogram") )
-
-(bar_chart <- ggplot(data = cars_tib, aes(x=gear)) + geom_bar() +
-              labs(y = "Number of gears", title = "Bar chart"))
-      #Notice we don't have to make a frequency table first any more!
-```
-I've not provided the sample code for making a pie chart because ggplot _really_ doesn't want you to make pie charts: you have to make a stacked bar chart first, and then wrap one of the axes around into a circle.  I told you statisticians hated pie charts with a passion!
+> Create a column called `gear_plus_carb` that is the sum of the gear and carb columns, like on Exercise 8.
 
 > **Exercise 18** (for the bold)
 >
@@ -830,6 +836,8 @@ long_form <- my_iris %>% pivot_longer(cols = contains("Ratio"), names_to = "type
 pvs_vir + geom_smooth(method = 'lm')
 #Adds trend line using a linear model (as discussed in optional Section 3.3)
 ```
+
+
 # Glossaries
 Throughout these glossaries, terms that only apply to the tidyverse section are marked with _(tidyverse)_.
 
@@ -986,4 +994,4 @@ Throughout these glossaries, terms that only apply to the tidyverse section are 
 # Copyright
 These notes (and the related slides and other course materials) are modified from the original notes written by \copyright\ 2021 Alex Homer; Alex mentions that they are inspired by an earlier version by Andre Python, and notes from a similar course by Maria Christodoulou.
 
-They are released for re-use under two alternative licences: a [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) licence, and a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/) licence.  This means you can re-use and adapt them for any purpose, provided you credit Alex and license your adaptations under (at least) one of these two licences.  (You can even use them for commercial purposes, provided you pick the first licence for your own adaptations.)
+They are released for re-use under two alternative licences: a [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) licence, and a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/) licence.  This means you can re-use and adapt them for any purpose, provided you credit Alex and license your adaptations under (at least) one of these two licences.

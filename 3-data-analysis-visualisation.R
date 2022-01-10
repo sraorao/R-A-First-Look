@@ -1,7 +1,7 @@
 #R: A first look course
 #Sheet 3: Data analysis and visualisation
 #IT Learning Centre, University of Oxford
-#Srinivasa Rao, 2021
+#Srinivasa Rao, 2022
 
 cars_dataset <- read.csv("Data/mtcars.csv")
 
@@ -38,7 +38,7 @@ cars_dataset.no.names <- cars_dataset[,-1] #Remove first column
 apply(cars_dataset.no.names, 2, sd)
 
 #### EXERCISE 7 ####
-# Write R code to calculate the mean of each column of "df.no.names", using "apply".  (Sometimes
+# Write R code to calculate the mean of each column of "cars_dataset.no.names", using "apply".  (Sometimes
 # it's more convenient to just have the vector of values you need, rather than the full "summary"
 # output.)  The function to calculate the mean is called "mean", as you might expect!
 # Check against the output of "summary" to make sure it's worked.
