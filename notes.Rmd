@@ -2,7 +2,7 @@
 title: "R: A first look"
 subtitle: "Course notes"
 author: "Alex Homer, Srinivasa Rao"
-date: "Michaelmas Term 2021"
+date: "Hilary Term 2022"
 output: pdf_document
 ---
 
